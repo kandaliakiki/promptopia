@@ -8,16 +8,16 @@ import React, { useEffect, useState } from "react";
 const Nav = () => {
   const isUserLoggedIn = true;
 
-  const [providerstate, setProviderstate] = useState(null);
+  const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
-    const setProviders = async () => {
+    const setUpProviders = async () => {
       const response = await getProviders();
-      setProviderstate(response);
+      setProviders(response);
     };
 
-    setProviders();
+    setUpProviders();
   }, []);
   return (
     <nav className="flex-between w-full mb-16 pt-3">
@@ -56,8 +56,8 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providerstate &&
-              Object.values(providerstate).map((provider) => (
+            {providers &&
+              Object.values(providers).map((provider) => (
                 <button
                   type="button"
                   key={provider.name}
@@ -114,8 +114,8 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {providerstate &&
-              Object.values(providerstate).map((provider) => (
+            {providers &&
+              Object.values(providers).map((provider) => (
                 <button
                   type="button"
                   key={provider.name}
