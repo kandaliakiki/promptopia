@@ -26,12 +26,10 @@ const Feed = () => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
       const data = await response.json();
-      console.log("datanya " + JSON.stringify(data[0]));
       setPosts(data);
     };
 
     fetchPosts();
-    console.log("postnya : " + posts[0]);
   }, []);
 
   return (
