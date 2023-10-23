@@ -40,7 +40,7 @@ const Feed = () => {
       const data = await response.json();
 
       if (textToSearch !== "") {
-        const regex = new RegExp(`.*${textToSearch}.*`);
+        const regex = new RegExp(`.*${textToSearch}.*`, "i");
         const filteredData = data.filter(
           (post) =>
             regex.test(post.creator.username) ||

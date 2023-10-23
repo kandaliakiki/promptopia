@@ -2,12 +2,16 @@
 
 import Profile from "@components/Profile";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const MyProfile = () => {
   const { data: session } = useSession();
   const [posts, setPosts] = useState([]);
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const searchParams = useSearchParams();
+  const userid = searchParams.get("userid");
   const router = useRouter();
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`);
@@ -33,18 +37,39 @@ const MyProfile = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log("linknya : " + `/api/users/${session?.user.id}/posts`);
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const linkToFetch = () => {
+        if (!userid) {
+          return `/api/users/${session?.user.id}/posts`;
+        } else return `/api/users/${userid}/posts`;
+      };
+      const response = await fetch(linkToFetch());
       const data = await response.json();
       setPosts(data);
+      const getName = () => {
+        if (!userid || session?.user.id === userid) {
+          return "My";
+        } else {
+          return `${data[0].creator.username}'s`;
+        }
+      };
+
+      const getDescription = () => {
+        if (!userid || session?.user.id === userid) {
+          return "Welcome to your personalized profile page";
+        } else {
+          return `Welcome to ${data[0].creator.username}'s personalized profile page. Explore ${data[0].creator.username}'s exceptional prompts and be inspired by the power of their imagination`;
+        }
+      };
+      setName(getName());
+      setDesc(getDescription());
     };
 
     if (session?.user.id) fetchPosts();
-  }, []);
+  }, [session]);
   return (
     <Profile
-      name="My"
-      desc="Welcome to your personalized profile page"
+      name={name}
+      desc={desc}
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
