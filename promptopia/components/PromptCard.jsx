@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const [copied, setCopied] = useState("");
+  const router = useRouter();
   const { data: session } = useSession();
   const pathName = usePathname();
   const handleCopy = () => {
@@ -17,7 +18,10 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
-        <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer ">
+        <div
+          className="flex-1 flex justify-start items-center gap-3 cursor-pointer "
+          onClick={() => router.push(`/profile?userid=${post.creator.id}`)}
+        >
           <Image
             src={post.creator.image}
             alt="user_image"
